@@ -4,20 +4,27 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public Transform target;
-    public float range = 10f;
+    public Transform target;  
+    public float range = 10f;  
     public float bulletSpeed = 27f;
     public float timeBtwShoot = 1f;
     public Transform firePoint;
     public GameObject bulletPrefab;
     public float moveSpeed = 3f;
+    public float hp = 3f;  // Vida del enemigo
+
     private float timer = 0f;
     private bool targetInRange = false;
     private bool hasStopped = false;
+    private float changeDirectionTime = 2f;  // Tiempo para cambiar de dirección
+    private float changeDirectionTimer = 0f;
+
+    private Vector3 randomDirection;  // Dirección aleatoria
 
     void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player").transform;
+        ChangeRandomDirection();  // Definir dirección aleatoria inicial
     }
 
     void Update()
@@ -30,7 +37,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            MoveForward();
+            MoveRandomly();  // Buscar al jugador aleatoriamente
         }
     }
 
@@ -42,6 +49,10 @@ public class Enemy : MonoBehaviour
         if (targetInRange)
         {
             hasStopped = true;
+        }
+        else
+        {
+            hasStopped = false;
         }
     }
 
@@ -78,11 +89,35 @@ public class Enemy : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 5f);
     }
 
-    void MoveForward()
+    void MoveRandomly()
     {
         if (!hasStopped)
         {
-            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+            // Cambiar de dirección cada 2 segundos
+            changeDirectionTimer += Time.deltaTime;
+            if (changeDirectionTimer >= changeDirectionTime)
+            {
+                ChangeRandomDirection();
+                changeDirectionTimer = 0f;
+            }
+
+            transform.Translate(randomDirection * moveSpeed * Time.deltaTime);
         }
+    }
+
+    // Método para recibir daño
+    public void TakeDamage(float damage)
+    {
+        hp -= damage;
+        if (hp <= 0)
+        {
+            Destroy(gameObject);  // Destruir al enemigo cuando se queda sin vida
+        }
+    }
+
+    void ChangeRandomDirection()
+    {
+        // Generar una nueva dirección aleatoria
+        randomDirection = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
     }
 }
