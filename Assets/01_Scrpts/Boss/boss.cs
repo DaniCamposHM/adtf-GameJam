@@ -5,9 +5,11 @@ public class Boss : MonoBehaviour
     public float range = 100f;
     public float timeBtwAttack = 1f;
     public float moveSpeed = 3f;
-    public float hp = 10f;
+    public float maxHealth = 10f;
     public Collider swordCollider;
+    public HealthBar healthBar;
 
+    private float hp;
     private float timer = 0f;
     private bool targetInRange = false;
     private bool hasStopped = false;
@@ -23,6 +25,10 @@ public class Boss : MonoBehaviour
         target = GameObject.FindGameObjectWithTag("Player").transform;
         animator = GetComponent<Animator>();
         ChangeRandomDirection();
+        //
+        healthBar = FindObjectOfType<HealthBar>();
+        healthBar.SetMaxHealth(maxHealth);
+        hp = maxHealth;
     }
 
     void Update()
@@ -112,6 +118,7 @@ public class Boss : MonoBehaviour
     public void TakeDamage(float damage)
     {
         hp -= damage;
+        healthBar.SetHealth(hp);
         if (hp <= 0)
         {
             Destroy(gameObject);

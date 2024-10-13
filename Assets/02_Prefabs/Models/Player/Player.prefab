@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 2531019755921800616}
   - component: {fileID: 2531019755921800619}
   - component: {fileID: 2531019755921800618}
+  - component: {fileID: -3392785263684120474}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -169,6 +170,20 @@ MonoBehaviour:
   shoot: {fileID: 8300000, guid: 1ed33a14d98b73141bc483925364952e, type: 3}
   die: {fileID: 8300000, guid: d55a0269b74e4da448bbe1911c7e56f4, type: 3}
   fuego: {fileID: 5072223495346951270, guid: 4b248c8cdf6814c4fa453c2d34f186d9, type: 3}
+  health: {fileID: 0}
+--- !u!114 &-3392785263684120474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2531019755921800621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc497ecdb62f8b2468ec0cbd1781f283, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  treesDestroyed: 0
 --- !u!1 &2531019756306968036
 GameObject:
   m_ObjectHideFlags: 0
