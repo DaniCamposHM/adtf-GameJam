@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -12,7 +14,7 @@ public class Player : MonoBehaviour
     [Header("Disparo")]
     public BulletPlayer bulletPrefab;   // Cambiado a BulletPlayer
     public Transform firePoint;         
-    public float timeBtwShoot = 0.7f;   
+    public float timeBtwShoot = 2f;   
     public float bulletSpeed = 10f;     
     public int bulletsCount = 30;       
     private float timer = 0f;           
@@ -20,6 +22,22 @@ public class Player : MonoBehaviour
 
     [Header("Caracteriticas")]
     public float hp = 10f;  // Vida del jugador
+
+
+    [Header("Efectos")]
+    public AudioClip shoot, die;
+
+    public GameObject fuego;
+
+    [Header("UI")]
+
+    public Text health;
+
+    
+    void Start()
+    {
+        health.text = hp.ToString();
+    }
 
     void Update()
     {
@@ -62,6 +80,13 @@ public class Player : MonoBehaviour
             if (Input.GetMouseButton(0)) 
             {
                 BulletPlayer b = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+                
+                //Efecto de Fuego al disparar (no es buena idea)
+                //Instantiate(fuego, firePoint.position, firePoint.rotation);
+
+                // Sonido de disparo
+                GameManager.instance.PlaySFX(shoot);
+
                 b.speed = bulletSpeed;  
                 bulletsCount--;         
                 canShoot = false;       
@@ -75,7 +100,29 @@ public class Player : MonoBehaviour
         hp -= damage;
         if (hp <= 0)
         {
-            Destroy(gameObject);  // Destruir al jugador cuando se queda sin vida
+
+            // Sonido de muerte
+            GameManager.instance.PlaySFX(die);
+
+            //Destroy(gameObject);  // Destruir al jugador cuando se queda sin vida
+
+            // Cambio de Escena
+            GameManager.instance.gameOver = true;
+            StartCoroutine(Dead());
+
+            // Texto para mostrar la vida
+            health.text = hp.ToString();
+
         }
     }
+
+    // Metodo para llevar a la ventana de muerte
+    IEnumerator Dead()
+    {
+        //Instantiate(expolitonEffect, transform.position, transform.rotation);
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene("EndMen");
+        Destroy(gameObject);
+    }
+
 }
