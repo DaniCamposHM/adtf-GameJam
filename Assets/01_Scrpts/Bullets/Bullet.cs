@@ -29,10 +29,11 @@ public class Bullet : MonoBehaviour
         {
             // Aplicar daño al jugador
             Player playerScript = collision.gameObject.GetComponent<Player>();
-            if (playerScript != null)
+            playerScript.TakeDamage(damage);
+            /*if (playerScript != null)
             {
                 playerScript.TakeDamage(damage);  // Llamar al método para hacer daño
-            }
+            }*/
 
             Destroy(gameObject);  // Destruir la bala después de colisionar
         }
