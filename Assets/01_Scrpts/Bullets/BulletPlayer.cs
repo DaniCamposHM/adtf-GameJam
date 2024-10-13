@@ -23,12 +23,17 @@ public class BulletPlayer : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
             other.gameObject.GetComponent<Enemy>().TakeDamage(damage);  // Hacer daño al enemigo
-            Destroy(gameObject);  
+            Destroy(gameObject);
         }
-
         else if (other.gameObject.CompareTag("Arbol"))
         {
             Destroy(gameObject);  
+        }
+        else if (other.gameObject.CompareTag("Boss"))
+        {
+            Debug.Log("Daño Boss");
+            other.gameObject.GetComponent<Boss>().TakeDamage(damage);
+            Destroy(gameObject);
         }
     }
 }
