@@ -43,7 +43,9 @@ GameObject:
   - component: {fileID: 2531019755921800617}
   - component: {fileID: 2531019755921800616}
   - component: {fileID: 2531019755921800619}
+  - component: {fileID: 2072583791678384000}
   - component: {fileID: 2531019755921800618}
+  - component: {fileID: 7672874683544347184}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -146,6 +148,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 1
+--- !u!114 &2072583791678384000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2531019755921800621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 887b6bf842da4af4eba81e0ff6c10aba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyPrefabs: []
+  timeBtwSpawn: 7
+  player: {fileID: 0}
+  spawnRadius: 70
+  rotationSpeed: 50
 --- !u!114 &2531019755921800618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,10 +184,26 @@ MonoBehaviour:
   timeBtwShoot: 1.5
   bulletSpeed: 7
   bulletsCount: 30
+  maxBullets: 30
   hp: 10
   shoot: {fileID: 8300000, guid: 1ed33a14d98b73141bc483925364952e, type: 3}
   die: {fileID: 8300000, guid: d55a0269b74e4da448bbe1911c7e56f4, type: 3}
+  reload: {fileID: 0}
   fuego: {fileID: 5072223495346951270, guid: 4b248c8cdf6814c4fa453c2d34f186d9, type: 3}
+  health: {fileID: 0}
+  ammoDisplay: {fileID: 0}
+--- !u!114 &7672874683544347184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2531019755921800621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88f9299602939c743b0595c829bf1e4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2531019756306968036
 GameObject:
   m_ObjectHideFlags: 0

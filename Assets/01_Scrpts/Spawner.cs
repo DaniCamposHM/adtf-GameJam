@@ -4,21 +4,17 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    public List<Transform> spawnPoints;
-    public List<GameObject> enemyPrefabs;
-    float timer = 0;
-    public float timeBtwSpawn = 7f;
-    public Transform target;
-    public float rotationSpeed = 50;
+    public List<GameObject> enemyPrefabs;  
+    public float timeBtwSpawn = 7f;        
+    public Transform player;               
+    public float spawnRadius = 70f;        
+    public float rotationSpeed = 50;       
 
-    void Start()
-    {
-        
-    }
+    private float timer = 0;
 
     void Update()
     {
-        transform.position = target.position;
+        transform.position = player.position;
         transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
         SpawnEnemy();
     }
@@ -26,12 +22,21 @@ public class Spawner : MonoBehaviour
     void SpawnEnemy()
     {
         timer += Time.deltaTime;
-        if(timer >= timeBtwSpawn)
+        if (timer >= timeBtwSpawn)
         {
             timer = 0;
-            Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Count)],
-                spawnPoints[Random.Range(0, spawnPoints.Count)].position,
-                Quaternion.identity);
+            Vector3 spawnPosition = GetRandomPositionAroundPlayer();
+            Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Count)], spawnPosition, Quaternion.identity);
         }
+    }
+
+    Vector3 GetRandomPositionAroundPlayer()
+    {
+        Vector3 randomDirection = Random.insideUnitSphere * spawnRadius;
+        randomDirection.y = 0;
+
+        Vector3 spawnPosition = player.position + randomDirection;
+
+        return spawnPosition;
     }
 }

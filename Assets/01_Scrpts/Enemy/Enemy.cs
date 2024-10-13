@@ -10,21 +10,19 @@ public class Enemy : MonoBehaviour
     public float timeBtwShoot = 1f;
     public Transform firePoint;
     public GameObject bulletPrefab;
-    public float moveSpeed = 3f;
-    public float hp = 3f;  // Vida del enemigo
+    public float moveSpeed = 5f;  
+    public float hp = 3f;  
 
     private float timer = 0f;
     private bool targetInRange = false;
-    private bool hasStopped = false;
-    private float changeDirectionTime = 2f;  // Tiempo para cambiar de dirección
+    private float changeDirectionTime = 2f;  
     private float changeDirectionTimer = 0f;
-
-    private Vector3 randomDirection;  // Dirección aleatoria
+    private Vector3 randomDirection;  
 
     void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player").transform;
-        ChangeRandomDirection();  // Definir dirección aleatoria inicial
+        ChangeRandomDirection();  
     }
 
     void Update()
@@ -37,7 +35,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            MoveRandomly();  // Buscar al jugador aleatoriamente
+            MoveRandomly();  
         }
     }
 
@@ -45,32 +43,25 @@ public class Enemy : MonoBehaviour
     {
         float distance = Vector3.Distance(transform.position, target.position);
         targetInRange = (distance <= range);
-
+        
         if (targetInRange)
         {
-            hasStopped = true;
-        }
-        else
-        {
-            hasStopped = false;
+            ChasePlayer();
         }
     }
 
     void StopAndShoot()
     {
-        if (hasStopped)
-        {
-            RotateToTarget();
+        RotateToTarget();
 
-            if (timer >= timeBtwShoot)
-            {
-                timer = 0f;
-                Shoot();
-            }
-            else
-            {
-                timer += Time.deltaTime;
-            }
+        if (timer >= timeBtwShoot)
+        {
+            timer = 0f;
+            Shoot();
+        }
+        else
+        {
+            timer += Time.deltaTime;
         }
     }
 
@@ -91,18 +82,22 @@ public class Enemy : MonoBehaviour
 
     void MoveRandomly()
     {
-        if (!hasStopped)
+        changeDirectionTimer += Time.deltaTime;
+        if (changeDirectionTimer >= changeDirectionTime)
         {
-            // Cambiar de dirección cada 2 segundos
-            changeDirectionTimer += Time.deltaTime;
-            if (changeDirectionTimer >= changeDirectionTime)
-            {
-                ChangeRandomDirection();
-                changeDirectionTimer = 0f;
-            }
-
-            transform.Translate(randomDirection * moveSpeed * Time.deltaTime);
+            ChangeRandomDirection();
+            changeDirectionTimer = 0f;
         }
+
+        transform.position += randomDirection * moveSpeed * Time.deltaTime;
+    }
+
+  
+    void ChasePlayer()
+    {
+        Vector3 direction = (target.position - transform.position).normalized; 
+        transform.position += direction * moveSpeed * Time.deltaTime; 
+        RotateToTarget(); 
     }
 
     // Método para recibir daño
@@ -111,13 +106,12 @@ public class Enemy : MonoBehaviour
         hp -= damage;
         if (hp <= 0)
         {
-            Destroy(gameObject);  // Destruir al enemigo cuando se queda sin vida
+            Destroy(gameObject);  
         }
     }
 
     void ChangeRandomDirection()
     {
-        // Generar una nueva dirección aleatoria
         randomDirection = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
     }
 }

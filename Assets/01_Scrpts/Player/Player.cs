@@ -9,42 +9,43 @@ public class Player : MonoBehaviour
     public Rigidbody rb;
 
     [Header("Movimiento")]
-    public float speed = 7f;
+    public float speed = 16f;
 
     [Header("Disparo")]
-    public BulletPlayer bulletPrefab;   // Cambiado a BulletPlayer
-    public Transform firePoint;         
-    public float timeBtwShoot = 2f;   
-    public float bulletSpeed = 10f;     
-    public int bulletsCount = 30;       
-    private float timer = 0f;           
-    private bool canShoot = true;       
+    public BulletPlayer bulletPrefab;
+    public Transform firePoint;
+    public float timeBtwShoot = 0.5f;
+    public float bulletSpeed = 150f;
+    public int bulletsCount = 30;  
+    public int maxBullets = 30;    
+    private float timer = 0f;
+    private bool canShoot = true;
 
     [Header("Caracteriticas")]
-    public float hp = 10f;  // Vida del jugador
-
+    public float hp = 10f;
+    public float maxHp = 10f;  
 
     [Header("Efectos")]
-    public AudioClip shoot, die;
-
+    public AudioClip shoot, die, reload;  
     public GameObject fuego;
 
     [Header("UI")]
+    public Text ammoDisplay;  
+    public Image healthBar;  
 
-    public Text health;
-
-    
     void Start()
     {
-        health.text = hp.ToString();
+        UpdateHealthBar();
+        ammoDisplay.text = bulletsCount + "/" + maxBullets;
     }
 
     void Update()
     {
         Movement();
         Rotation();
-        CheckIfCanShoot();  
-        Shoot();            
+        CheckIfCanShoot();
+        Shoot();
+        Reload();  
     }
 
     void Rotation()
@@ -57,7 +58,16 @@ public class Player : MonoBehaviour
     void Movement()
     {
         Vector3 dir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        rb.velocity = dir * speed + new Vector3(0, rb.velocity.y, 0);
+
+        if (dir.magnitude > 0)
+        {
+            Vector3 moveVelocity = dir.normalized * speed;
+            rb.velocity = new Vector3(moveVelocity.x, rb.velocity.y, moveVelocity.z);
+        }
+        else
+        {
+            rb.velocity = new Vector3(0, rb.velocity.y, 0);
+        }
     }
 
     void CheckIfCanShoot()
@@ -75,54 +85,53 @@ public class Player : MonoBehaviour
 
     void Shoot()
     {
-        if (canShoot && bulletsCount > 0) 
+        if (canShoot && bulletsCount > 0)
         {
-            if (Input.GetMouseButton(0)) 
+            if (Input.GetMouseButton(0))
             {
                 BulletPlayer b = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-                
-                //Efecto de Fuego al disparar (no es buena idea)
-                //Instantiate(fuego, firePoint.position, firePoint.rotation);
-
-                // Sonido de disparo
                 GameManager.instance.PlaySFX(shoot);
 
-                b.speed = bulletSpeed;  
-                bulletsCount--;         
-                canShoot = false;       
+                b.speed = bulletSpeed;
+                bulletsCount--;
+                canShoot = false;
+                ammoDisplay.text = bulletsCount + "/" + maxBullets;
             }
         }
     }
 
-    // Método para recibir daño
+    void Reload()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            GameManager.instance.PlaySFX(reload);
+            bulletsCount = maxBullets;
+            ammoDisplay.text = bulletsCount + "/" + maxBullets;
+        }
+    }
+
     public void TakeDamage(float damage)
     {
         hp -= damage;
         if (hp <= 0)
         {
-
-            // Sonido de muerte
+            hp = 0;
             GameManager.instance.PlaySFX(die);
-
-            //Destroy(gameObject);  // Destruir al jugador cuando se queda sin vida
-
-            // Cambio de Escena
             GameManager.instance.gameOver = true;
             StartCoroutine(Dead());
-
-            // Texto para mostrar la vida
-            health.text = hp.ToString();
-
         }
+
+        UpdateHealthBar();
+    }
+    void UpdateHealthBar()
+    {
+        healthBar.fillAmount = hp / maxHp;
     }
 
-    // Metodo para llevar a la ventana de muerte
     IEnumerator Dead()
     {
-        //Instantiate(expolitonEffect, transform.position, transform.rotation);
         yield return new WaitForSeconds(2);
         SceneManager.LoadScene("EndMen");
         Destroy(gameObject);
     }
-
 }

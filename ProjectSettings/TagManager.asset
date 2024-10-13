@@ -7,7 +7,6 @@ TagManager:
   - Enemy
   - Arbol
   - bulletPlay
-  - Boss
   layers:
   - Default
   - TransparentFX

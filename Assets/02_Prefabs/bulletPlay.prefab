@@ -8,6 +8,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -5984343295572895750, guid: b85a0aca2af0d9b4588fe3a45d470e6d, type: 3}
+      propertyPath: speed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: -5984343295572895750, guid: b85a0aca2af0d9b4588fe3a45d470e6d, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
@@ -67,7 +71,8 @@ PrefabInstance:
       propertyPath: m_TagString
       value: bulletPlay
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -5984343295572895750, guid: b85a0aca2af0d9b4588fe3a45d470e6d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: b85a0aca2af0d9b4588fe3a45d470e6d, type: 3}
 --- !u!1 &5773447774880995739 stripped
 GameObject:
@@ -86,5 +91,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d713116070742c4581b0bbadc066528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  speed: 50
   timeToDestroy: 2
+  damage: 1
